@@ -1,6 +1,6 @@
 import { body } from "express-validator"
 import { asyncHandler } from "../utils/async-handler.js";
-
+import {AvailableUserRole} from "../utils/constants.js"
 
 
 // User register validator
@@ -75,4 +75,33 @@ const userResetForgotPasswordValidator = () => {
     ]
 }
 
-export {userRegisterValidator, userLoginValidator, userChangeCurrentPasswordValidator, userForgotPasswordValidator, userResetForgotPasswordValidator}
+
+const createProjectValidator = () => {
+    return [
+        body("name")
+            .notEmpty()
+            .withMessage("Name is required"),
+        body("description")
+            .optional()
+    ]
+}
+
+
+const addMemberToProjectValidator = () => {
+    return [
+        body("email")
+            .trim()
+            .notEmpty()
+            .withMessage("Email is required")
+            .isEmail()
+            .withMessage("Email is invalid"),
+        body("role")
+            .notEmpty()
+            .withMessage("Role is required")
+            .isIn(AvailableUserRole)
+            .withMessage("Role is invalid")
+    ]
+}
+
+
+export {userRegisterValidator, userLoginValidator, userChangeCurrentPasswordValidator, userForgotPasswordValidator, userResetForgotPasswordValidator, createProjectValidator, addMemberToProjectValidator}
