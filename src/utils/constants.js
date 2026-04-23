@@ -4,6 +4,7 @@ export const UserRolesEnum = {
   MEMBER: "member",
 };
 
+// Returns an array with the values
 export const AvailableUserRole = Object.values(UserRolesEnum);
 
 export const TaskStatusEnum = {
@@ -12,4 +13,5 @@ export const TaskStatusEnum = {
   DONE: "done",
 };
 
+// Returns an array with the values
 export const AvailableTaskStatuses = Object.values(TaskStatusEnum);

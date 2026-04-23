@@ -34,7 +34,7 @@ const createProject = asyncHandler(async(req, res, next) => {
 })
 
 
-// Find the projects the logged in user is a part of, and also show basic details of each project the user is part of along with the number of members in the project.
+// Find the projects the logged in user is a part of, and also show basic details of that project, along with the number of members in the project.
 const getProjects = asyncHandler(async(req, res, next) => {
     const projects = await ProjectMember.aggregate([
         {
@@ -316,4 +316,4 @@ const deleteMember = asyncHandler(async(req, res, next) => {
       );
 })
 
-export {addMembersToProject, createProject, deleteMember, getProjects, getProjectById, getProjectMembers, updateProject, updateMemberRole}
+export {addMembersToProject, createProject, deleteMember, getProjects, getProjectById, getProjectMembers, updateProject, updateMemberRole, deleteProject}
