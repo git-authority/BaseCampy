@@ -75,7 +75,7 @@ const createTask = asyncHandler(async (req, res) => {
 
 // Fetch tasks using task id
 const getTaskById = asyncHandler(async (req, res) => {
-    const { taskId } = req.params;
+    const { projectId, taskId } = req.params;
 
     const task = await Task.aggregate([
 
@@ -83,6 +83,7 @@ const getTaskById = asyncHandler(async (req, res) => {
         {
             $match: {
                 _id: new mongoose.Types.ObjectId(taskId),
+                project: new mongoose.Types.ObjectId(projectId)
             }
         },
 
@@ -173,14 +174,59 @@ const getTaskById = asyncHandler(async (req, res) => {
 });
 
 
-
+// Update task using projectId and taskId
 const updateTask = asyncHandler(async (req, res) => {
-  // test
+    const {projectId, taskId} = req.params;
+    const {title, description} = req.body;
+
+    const task = await Task.findOneAndUpdate(
+        {
+            _id: new mongoose.Types.ObjectId(taskId),
+            project: new mongoose.Types.ObjectId(projectId)
+        },
+        {
+            title,
+            description
+        },
+        {
+            new: true
+        }
+    )
+
+    if(!task){
+        throw new ApiError(404, "Task not found")
+    }
+
+    return res
+            .status(200)
+            .json(
+                new ApiResponse(200, task, "Task updated successfully")
+            )
+
 });
 
+// Delete task using projectId and taskId
 const deleteTask = asyncHandler(async (req, res) => {
-  // test
+    const { projectId, taskId } = req.params;
+
+    const task = await Task.findOneAndDelete(
+      {
+        _id: new mongoose.Types.ObjectId(taskId),
+        project: new mongoose.Types.ObjectId(projectId),
+      }
+    );
+
+    if (!task) {
+      throw new ApiError(404, "Task not found");
+    }
+
+    return res
+      .status(200)
+      .json(new ApiResponse(200, task, "Task deleted successfully"));
 });
+
+
+
 
 const createSubTask = asyncHandler(async (req, res) => {
   // test
