@@ -18,7 +18,7 @@ const generateAccessAndRefreshTokens = async (userId) => {
 
         user.refreshToken = refreshToken;
 
-        // Save document to MongoDB without any validation checking
+        // Save refresh token to db without any validation checking
         await user.save({validateBeforeSave: false})
 
         return {accessToken, refreshToken}
@@ -42,7 +42,7 @@ const registerUser = asyncHandler(async(req, res) => {
     })
 
     if(existedUser){
-        throw new ApiError(409, "User with email or username already exists, []")
+        throw new ApiError(409, "User with email or username already exists", [])
     }
 
     const user = await User.create({
@@ -276,7 +276,7 @@ const resendEmailVerification = asyncHandler(async (req, res, next) => {
 });
 
 
-// Refreshing refresh token endpoint
+// Refresh both access and refresh token
 const refreshRefreshToken = asyncHandler(async(req, res, next) => {
 
     const incomingRefreshToken = req.cookies.refreshToken || req.body.refreshToken
